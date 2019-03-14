@@ -24,7 +24,7 @@
 
 cmake_minimum_required(VERSION 3.6)
 
-set(APP_NAME cpp-empty-test)
+set(APP_NAME Cocos2dxTemplate)
 
 project(${APP_NAME} CXX)
 
@@ -125,6 +125,14 @@ endif()
 target_link_libraries(${APP_NAME} cocos2d)
 
 target_include_directories(${APP_NAME} PRIVATE Classes)
+
+target_compile_features(${APP_NAME} PRIVATE cxx_std_17)
+
+if (MSVC)
+    target_compile_options(${APP_NAME} PRIVATE /W4 /utf-8 /permissive-)
+else()
+    target_compile_options(${APP_NAME} PRIVATE -Wall -Wextra -Wpedantic -fvisibility=hidden -Wshadow)
+endif()
 
 # mark app resources
 setup_cocos_app_config(${APP_NAME})
