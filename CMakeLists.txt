@@ -21,27 +21,29 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 # ****************************************************************************/
+
 cmake_minimum_required(VERSION 3.6)
 
 set(APP_NAME cpp-empty-test)
 
-project(${APP_NAME})
+project(${APP_NAME} CXX)
 
-if(NOT DEFINED BUILD_ENGINE_DONE)
-    set(COCOS2DX_ROOT_PATH ${CMAKE_CURRENT_SOURCE_DIR}/../..)
-    set(CMAKE_MODULE_PATH ${COCOS2DX_ROOT_PATH}/cmake/Modules/)
-
-    include(CocosBuildSet)
-    add_subdirectory(${COCOS2DX_ROOT_PATH}/cocos ${ENGINE_BINARY_PATH}/cocos/core)
+if(NOT DEFINED COCOS2DX_ROOT_PATH)
+    message(FATAL_ERROR "COCOS2DX_ROOT_PATH not defined, aborting.")
 endif()
+
+# TODO Checkt that COCOS2DX_ROOT_PATH appears to be a valid directory structure
+
+set(CMAKE_MODULE_PATH ${COCOS2DX_ROOT_PATH}/cmake/Modules/)
+
+include(CocosBuildSet)
+add_subdirectory(${COCOS2DX_ROOT_PATH}/cocos ${ENGINE_BINARY_PATH}/cocos/core)
 
 # record sources, headers, resources...
 set(GAME_SOURCE)
 set(GAME_HEADER)
 
-set(GAME_RES_FOLDER
-    "${CMAKE_CURRENT_SOURCE_DIR}/Resources"
-    )
+set(GAME_RES_FOLDER "${CMAKE_CURRENT_SOURCE_DIR}/Resources")
 if(APPLE OR VS)
     cocos_mark_multi_resources(cc_common_res RES_TO "Resources" FOLDERS ${GAME_RES_FOLDER})
 endif()
