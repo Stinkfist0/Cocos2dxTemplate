@@ -25,7 +25,15 @@
 #ifndef  _APP_DELEGATE_H_
 #define  _APP_DELEGATE_H_
 
+//! @todo Make a utility files (IncludeCocos2dBegin.h & IncludeCocos2End.h) to help suppressing these.
+#ifdef _MSC_VER
+#pragma warning(push)
+#pragma warning(disable : 4201 4100)
+#endif
 #include "cocos2d.h"
+#ifdef _MSC_VER
+#pragma warning(pop)
+#endif
 
 /**
 @brief    The cocos2d Application.
