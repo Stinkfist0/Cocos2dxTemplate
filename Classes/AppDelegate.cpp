@@ -24,25 +24,16 @@
 
 #include "AppDelegate.h"
 
-#include <vector>
-#include <string>
-
 #include "HelloWorldScene.h"
 #include "AppMacros.h"
+
+#include <vector>
+#include <string>
 
 //Uncomment the following line to use localize manager
 //#include "editor-support/cocostudio/LocalizationManager.h"
 
 USING_NS_CC;
-using namespace std;
-
-AppDelegate::AppDelegate() {
-
-}
-
-AppDelegate::~AppDelegate() 
-{
-}
 
 void AppDelegate::initGLContextAttrs()
 {
@@ -62,16 +53,16 @@ bool AppDelegate::applicationDidFinishLaunching()
     }
 
     // Set window icon with best resolution (windows and linux)
-    #if (CC_TARGET_PLATFORM == CC_PLATFORM_LINUX)
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_LINUX)
     // assert error when using listFilesRecursively on Windows 10
     // refer to: https://github.com/cocos2d/cocos2d-x/issues/18835
     // don't use listFiles as workaround (it will return directory itself)
     // refer to: https://github.com/cocos2d/cocos2d-x/issues/18834
     std::vector<std::string> icons;
     FileUtils::getInstance()->listFilesRecursively("icons", &icons);
-    #else
+#else
     std::string icons = "icons/Icon-60@3x.png";
-    #endif /* (CC_TARGET_PLATFORM == CC_PLATFORM_LINUX) */
+#endif
     glview->setIcon(icons);
 
     director->setOpenGLView(glview);
@@ -81,7 +72,7 @@ bool AppDelegate::applicationDidFinishLaunching()
 
     Size frameSize = glview->getFrameSize();
     
-    vector<string> searchPath;
+    std::vector<std::string> searchPath;
 
     // In this demo, we select resource according to the frame's height.
     // If the resource size is different from design resolution size, you need to set contentScaleFactor.

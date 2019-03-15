@@ -22,23 +22,19 @@
  THE SOFTWARE.
  ****************************************************************************/
 
+#include "AppDelegate.h"
+
 #ifdef _WIN32
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
-#include <tchar.h>
-#include "platform/CCStdC.h"
 #endif
 
-#include "../Classes/AppDelegate.h"
-
-USING_NS_CC;
-
 #ifdef _WIN32
-int WINAPI _tWinMain(HINSTANCE /*hInstance*/, HINSTANCE /*hPrevInstance*/, LPTSTR /*lpCmdLine*/, int /*nCmdShow*/)
+int WINAPI wWinMain(HINSTANCE /*hInstance*/, HINSTANCE /*hPrevInstance*/, LPTSTR /*lpCmdLine*/, int /*nCmdShow*/)
 #else
-int main(int argc, char *argv[])
+int main(int /*argc*/, char /* *argv[]*/)
 #endif
 {
     AppDelegate app;
-    return Application::getInstance()->run();
+    return cocos2d::Application::getInstance()->run();
 }

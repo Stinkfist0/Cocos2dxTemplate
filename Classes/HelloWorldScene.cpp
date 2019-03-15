@@ -27,7 +27,6 @@
 
 USING_NS_CC;
 
-
 Scene* HelloWorld::scene()
 {
      return HelloWorld::create();
@@ -97,7 +96,7 @@ bool HelloWorld::init()
     return true;
 }
 
-void HelloWorld::menuCloseCallback(Ref* sender)
+void HelloWorld::menuCloseCallback(Ref* /*sender*/)
 {
     Director::getInstance()->end();
 }

@@ -22,8 +22,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef  _APP_DELEGATE_H_
-#define  _APP_DELEGATE_H_
+#pragma once
 
 //! @todo Make a utility files (IncludeCocos2dBegin.h & IncludeCocos2End.h) to help suppressing these.
 #ifdef _MSC_VER
@@ -35,38 +34,15 @@
 #pragma warning(pop)
 #endif
 
-/**
-@brief    The cocos2d Application.
-
-Private inheritance here hides part of interface from Director.
-*/
+// The cocos2d Application.
+// Private inheritance here hides part of interface from Director.
 class  AppDelegate : private cocos2d::Application
 {
 public:
-    AppDelegate();
-    virtual ~AppDelegate();
+    AppDelegate() = default;
 
-    virtual void initGLContextAttrs();
-    
-    /**
-    @brief    Implement Director and Scene init code here.
-    @return true    Initialize success, app continue.
-    @return false   Initialize failed, app terminate.
-    */
-    virtual bool applicationDidFinishLaunching();
-
-    /**
-    @brief  Called when the application moves to the background
-    @param  the pointer of the application
-    */
-    virtual void applicationDidEnterBackground();
-
-    /**
-    @brief  Called when the application reenters the foreground
-    @param  the pointer of the application
-    */
-    virtual void applicationWillEnterForeground();
+    void initGLContextAttrs() override;
+    bool applicationDidFinishLaunching() override;
+    void applicationDidEnterBackground() override;
+    void applicationWillEnterForeground() override;
 };
-
-#endif // _APP_DELEGATE_H_
-

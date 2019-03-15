@@ -22,23 +22,24 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef __HELLOWORLD_SCENE_H__
-#define __HELLOWORLD_SCENE_H__
+#pragma once
 
+//! @todo Make a utility files (IncludeCocos2dBegin.h & IncludeCocos2End.h) to help suppressing these.
+#ifdef _MSC_VER
+#pragma warning(push)
+#pragma warning(disable : 4201 4100)
+#endif
 #include "cocos2d.h"
+#ifdef _MSC_VER
+#pragma warning(pop)
+#endif
 
 class HelloWorld : public cocos2d::Scene
 {
 public:
-    virtual bool init() override;
-
+    bool init() override;
     static cocos2d::Scene* scene();
-
-    // a selector callback
     void menuCloseCallback(Ref* sender);
-
     // implement the "static create()" method manually
     CREATE_FUNC(HelloWorld);
 };
-
-#endif // __HELLOWORLD_SCENE_H__
