@@ -67,6 +67,8 @@ endif()
 
 list(APPEND GAME_HEADER
     Classes/AppMacros.h
+    Classes/IncludeCocos2dBegin.h
+    Classes/IncludeCocos2dEnd.h
     Classes/HelloWorldScene.h
     Classes/AppDelegate.h
 )

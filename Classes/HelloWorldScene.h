@@ -24,15 +24,9 @@
 
 #pragma once
 
-//! @todo Make a utility files (IncludeCocos2dBegin.h & IncludeCocos2End.h) to help suppressing these.
-#ifdef _MSC_VER
-#pragma warning(push)
-#pragma warning(disable : 4201 4100)
-#endif
+#include "IncludeCocos2dBegin.h"
 #include "cocos2d.h"
-#ifdef _MSC_VER
-#pragma warning(pop)
-#endif
+#include "IncludeCocos2dEnd.h"
 
 class HelloWorld : public cocos2d::Scene
 {

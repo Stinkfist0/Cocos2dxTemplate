@@ -32,7 +32,7 @@
 #ifdef _WIN32
 int WINAPI wWinMain(HINSTANCE /*hInstance*/, HINSTANCE /*hPrevInstance*/, LPTSTR /*lpCmdLine*/, int /*nCmdShow*/)
 #else
-int main(int /*argc*/, char /* *argv[]*/)
+int main(int /*argc*/, char** /*argv*/)
 #endif
 {
     AppDelegate app;
