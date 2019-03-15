@@ -22,7 +22,9 @@
 # THE SOFTWARE.
 # ****************************************************************************/
 
-cmake_minimum_required(VERSION 3.6)
+# 3.6 is the minimum for Cocos2d-x.
+# 3.7 is required for BUILDSYSTEM_TARGETS.
+cmake_minimum_required(VERSION 3.7)
 
 set(APP_NAME Cocos2dxTemplate)
 
@@ -38,6 +40,21 @@ set(CMAKE_MODULE_PATH ${COCOS2DX_ROOT_PATH}/cmake/Modules/)
 
 include(CocosBuildSet)
 add_subdirectory(${COCOS2DX_ROOT_PATH}/cocos ${ENGINE_BINARY_PATH}/cocos/core)
+
+function(get_all_targets _result _dir)
+    get_property(_subdirs DIRECTORY "${_dir}" PROPERTY SUBDIRECTORIES)
+    foreach(_subdir IN LISTS _subdirs)
+        get_all_targets(${_result} "${_subdir}")
+    endforeach()
+    get_property(_sub_targets DIRECTORY "${_dir}" PROPERTY BUILDSYSTEM_TARGETS)
+    set(${_result} ${${_result}} ${_sub_targets} PARENT_SCOPE)
+endfunction()
+
+# Supress vast amount of warning spam coming from dependencies and cocos2d itself.
+get_all_targets(targets "${CMAKE_CURRENT_SOURCE_DIR}")
+foreach(target IN LISTS targets)
+    set_target_properties(${target} PROPERTIES COMPILE_FLAGS "/W1 /D_CRT_SECURE_NO_WARNINGS")
+endforeach()
 
 # record sources, headers, resources...
 set(GAME_SOURCE)
@@ -130,6 +147,8 @@ target_compile_features(${APP_NAME} PRIVATE cxx_std_17)
 
 if (MSVC)
     target_compile_options(${APP_NAME} PRIVATE /W4 /utf-8 /permissive-)
+    # Enforce Unicode for Win32 and CRT APIs.
+    target_compile_definitions(${APP_NAME} PRIVATE -DUNICODE -D_UNICODE)
 else()
     target_compile_options(${APP_NAME} PRIVATE -Wall -Wextra -Wpedantic -fvisibility=hidden -Wshadow)
 endif()
