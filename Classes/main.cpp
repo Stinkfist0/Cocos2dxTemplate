@@ -22,19 +22,23 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#include "../Classes/AppDelegate.h"
-#include "cocos2d.h"
+#ifdef _WIN32
+#define WIN32_LEAN_AND_MEAN
+#include <windows.h>
+#include <tchar.h>
+#include "platform/CCStdC.h"
+#endif
 
-#include <stdlib.h>
-#include <stdio.h>
-#include <unistd.h>
-#include <string>
+#include "../Classes/AppDelegate.h"
 
 USING_NS_CC;
 
-int main(int argc, char **argv)
+#ifdef _WIN32
+int WINAPI _tWinMain(HINSTANCE /*hInstance*/, HINSTANCE /*hPrevInstance*/, LPTSTR /*lpCmdLine*/, int /*nCmdShow*/)
+#else
+int main(int argc, char *argv[])
+#endif
 {
-    // create the application instance
     AppDelegate app;
     return Application::getInstance()->run();
 }

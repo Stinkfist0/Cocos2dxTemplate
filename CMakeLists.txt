@@ -66,69 +66,53 @@ if(APPLE OR VS)
 endif()
 
 list(APPEND GAME_HEADER
-     Classes/AppMacros.h
-     Classes/HelloWorldScene.h
-     Classes/AppDelegate.h
-     )
+    Classes/AppMacros.h
+    Classes/HelloWorldScene.h
+    Classes/AppDelegate.h
+)
 list(APPEND GAME_SOURCE
-     Classes/AppDelegate.cpp
-     Classes/HelloWorldScene.cpp
-     )
+    Classes/AppDelegate.cpp
+    Classes/HelloWorldScene.cpp
+    Classes/main.cpp
+)
 
 if(ANDROID)
     # change APP_NAME to the share library name for Android, it's value depend on AndroidManifest.xml
     set(APP_NAME cpp_empty_test)
-    list(APPEND GAME_SOURCE
-         proj.android/app/jni/main.cpp
-         )
+    list(APPEND GAME_SOURCE proj.android/app/jni/main.cpp)
 elseif(LINUX)
-    list(APPEND GAME_SOURCE
-         proj.linux/main.cpp
-         )
 elseif(WINDOWS)
-    list(APPEND GAME_HEADER
-         proj.win32/main.h
-         )
-    list(APPEND GAME_SOURCE
-         proj.win32/main.cpp
-         ${cc_common_res}
-         )
+    list(APPEND GAME_SOURCE ${cc_common_res})
 elseif(APPLE)
     if(IOS)
         list(APPEND GAME_HEADER
              proj.ios/AppController.h
              proj.ios/RootViewController.h
-             )
+         )
         set(APP_UI_RES
             proj.ios/LaunchScreen.storyboard
             proj.ios/LaunchScreenBackground.png
             proj.ios/Images.xcassets
-            )
+        )
         list(APPEND GAME_SOURCE
              proj.ios/main.m
              proj.ios/AppController.mm
              proj.ios/RootViewController.mm
              ${APP_UI_RES}
-             )
+         )
     elseif(MACOSX)
         set(APP_UI_RES
             proj.mac/Icon.icns
             proj.mac/Info.plist
             proj.mac/en.lproj/MainMenu.xib
             proj.mac/en.lproj/InfoPlist.strings
-            )
-        list(APPEND GAME_SOURCE
-             proj.mac/main.cpp
-             ${APP_UI_RES}
-             )
+        )
+        list(APPEND GAME_SOURCE ${APP_UI_RES})
     endif()
     list(APPEND GAME_SOURCE ${cc_common_res})
 endif()
 
-set(all_code_files
-    ${GAME_HEADER}
-    ${GAME_SOURCE}
-    )
+set(all_code_files ${GAME_HEADER} ${GAME_SOURCE})
 
 # mark app complie info
 if(NOT ANDROID)
