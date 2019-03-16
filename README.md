@@ -1,14 +1,9 @@
 # Cocos2dxTemplate
 
-This will be a purely CMake-based (minimal amount of platform- or IDE-specific files) project template 
-for new cross-platform (Win32, Linux, macOS, Android, iOS) Cocos2d-x C++17 (or newer) projects.
-
-## Prerequisites
-- CMake (3.7 or newer)
-- C++17-capable compiler
+This will be a purely CMake-based (minimal amount of platform- or IDE-specific files) project template for new cross-platform (Win32/Linux/macOS/Android) Cocos2d-x C++17 (or newer) projects.
 
 ## Usage
-**A)** Obtain Cocos2d-x and unzip it to e.g. `C:\Cocos\cocos2d-x-3.17.1`
+**1)** Obtain Cocos2d-x and unzip it to e.g. `C:\Cocos\cocos2d-x-3.17.1`
 
 **2)** Obtain this repository and copy it to e.g. `C:\Cocos\MyGame`
 
@@ -18,6 +13,12 @@ for new cross-platform (Win32, Linux, macOS, Android, iOS) Cocos2d-x C++17 (or n
 
 **5a)** Win32/Linux/macOS: `cmake ../Cocos2dxTemplate -DCOCOS2DX_ROOT_PATH=C:/Cocos/cocos2d-x-3.17.1`  
 **5b)** Android/iOS: TODO
+
+**5b)** Android:
+-  Set `COCOS2DX_ROOT_PATH` environment variable to point to Cocos2d-x's location.
+- Make sure `ninja` is in `PATH`.
+
+**5c)** iOS: TODO
 
 **6)** Open/build the solution/project
 

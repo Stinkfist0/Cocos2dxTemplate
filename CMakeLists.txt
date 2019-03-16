@@ -22,39 +22,49 @@
 # THE SOFTWARE.
 # ****************************************************************************/
 
-# 3.6 is the minimum for Cocos2d-x 3.17.1.
-# 3.7 is required for BUILDSYSTEM_TARGETS.
-cmake_minimum_required(VERSION 3.7)
-
 set(APP_NAME Cocos2dxTemplate)
 
-project(${APP_NAME} CXX)
+project(${APP_NAME})
 
-if(NOT DEFINED COCOS2DX_ROOT_PATH)
+set(CMAKE_CXX_STANDARD 17)
+# With CMake >= 3.8 use target_compile_features() after add_executable instead:
+#target_compile_features(${APP_NAME} PRIVATE cxx_std_17)
+
+if (NOT DEFINED COCOS2DX_ROOT_PATH)
     message(FATAL_ERROR "COCOS2DX_ROOT_PATH not defined, aborting.")
 endif()
-
-# TODO Checkt that COCOS2DX_ROOT_PATH appears to be a valid directory structure
+message(STATUS "COCOS2DX_ROOT_PATH=${COCOS2DX_ROOT_PATH}")
 
 set(CMAKE_MODULE_PATH ${COCOS2DX_ROOT_PATH}/cmake/Modules/)
-
+# The next line will fail if COCOS2DX_ROOT_PATH does not point to a valid Cocos2d-x directory structure
 include(CocosBuildSet)
 add_subdirectory(${COCOS2DX_ROOT_PATH}/cocos ${ENGINE_BINARY_PATH}/cocos/core)
 
-function(get_all_targets _result _dir)
-    get_property(_subdirs DIRECTORY "${_dir}" PROPERTY SUBDIRECTORIES)
-    foreach(_subdir IN LISTS _subdirs)
-        get_all_targets(${_result} "${_subdir}")
-    endforeach()
-    get_property(_sub_targets DIRECTORY "${_dir}" PROPERTY BUILDSYSTEM_TARGETS)
-    set(${_result} ${${_result}} ${_sub_targets} PARENT_SCOPE)
-endfunction()
+# 3.6 is the minimum for Cocos2d-x 3.17.1.
+# 3.7 is required for BUILDSYSTEM_TARGETS.
+# TODO Use 3.7+, but currently getting weird invalid char error with it
+if (ANDROID)
+    cmake_minimum_required(VERSION 3.6)
+else()
+    cmake_minimum_required(VERSION 3.7)
+endif()
 
 # Supress vast amount of warning spam coming from dependencies and cocos2d itself.
-get_all_targets(targets "${CMAKE_CURRENT_SOURCE_DIR}")
-foreach(target IN LISTS targets)
-    set_target_properties(${target} PROPERTIES COMPILE_FLAGS "/W1 /D_CRT_SECURE_NO_WARNINGS")
-endforeach()
+if (MSVC)
+    function(get_all_targets _result _dir)
+        get_property(_subdirs DIRECTORY "${_dir}" PROPERTY SUBDIRECTORIES)
+        foreach(_subdir IN LISTS _subdirs)
+            get_all_targets(${_result} "${_subdir}")
+        endforeach()
+        get_property(_sub_targets DIRECTORY "${_dir}" PROPERTY BUILDSYSTEM_TARGETS)
+        set(${_result} ${${_result}} ${_sub_targets} PARENT_SCOPE)
+    endfunction()
+
+    get_all_targets(targets "${CMAKE_CURRENT_SOURCE_DIR}")
+    foreach(target IN LISTS targets)
+        set_target_properties(${target} PROPERTIES COMPILE_FLAGS "/W1 /D_CRT_SECURE_NO_WARNINGS")
+    endforeach()
+endif()
 
 # record sources, headers, resources...
 set(GAME_SOURCE)
@@ -80,7 +90,7 @@ list(APPEND GAME_SOURCE
 
 if(ANDROID)
     # change APP_NAME to the share library name for Android, it's value depend on AndroidManifest.xml
-    set(APP_NAME cpp_empty_test)
+    set(APP_NAME MyGame)
     list(APPEND GAME_SOURCE android/app/jni/main.cpp)
 elseif(LINUX)
 elseif(WINDOWS)
@@ -126,8 +136,6 @@ endif()
 target_link_libraries(${APP_NAME} cocos2d)
 
 target_include_directories(${APP_NAME} PRIVATE Classes)
-
-target_compile_features(${APP_NAME} PRIVATE cxx_std_17)
 
 if (MSVC)
     target_compile_options(${APP_NAME} PRIVATE /W4 /utf-8 /permissive-)

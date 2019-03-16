@@ -1,5 +1,4 @@
 include ':libcocos2dx'
-project(':libcocos2dx').projectDir = new File(settingsDir, '../../../cocos/platform/android/libcocos2dx')
-include ':CppEmptyTest'
-project(':CppEmptyTest').projectDir = new File(settingsDir, 'app')
-rootProject.name = "cpp-empty-test"
+project(':libcocos2dx').projectDir = new File(settingsDir, '../../../../cocos2d-x-3.17.1/cocos/platform/android/libcocos2dx')
+include ':Cocos2dxTemplate'
+project(':Cocos2dxTemplate').projectDir = new File(settingsDir, 'app')
