@@ -22,7 +22,7 @@
 # THE SOFTWARE.
 # ****************************************************************************/
 
-# 3.6 is the minimum for Cocos2d-x.
+# 3.6 is the minimum for Cocos2d-x 3.17.1.
 # 3.7 is required for BUILDSYSTEM_TARGETS.
 cmake_minimum_required(VERSION 3.7)
 
@@ -81,33 +81,33 @@ list(APPEND GAME_SOURCE
 if(ANDROID)
     # change APP_NAME to the share library name for Android, it's value depend on AndroidManifest.xml
     set(APP_NAME cpp_empty_test)
-    list(APPEND GAME_SOURCE proj.android/app/jni/main.cpp)
+    list(APPEND GAME_SOURCE android/app/jni/main.cpp)
 elseif(LINUX)
 elseif(WINDOWS)
     list(APPEND GAME_SOURCE ${cc_common_res})
 elseif(APPLE)
     if(IOS)
         list(APPEND GAME_HEADER
-             proj.ios/AppController.h
-             proj.ios/RootViewController.h
+             ios/AppController.h
+             ios/RootViewController.h
          )
         set(APP_UI_RES
-            proj.ios/LaunchScreen.storyboard
-            proj.ios/LaunchScreenBackground.png
-            proj.ios/Images.xcassets
+            ios/LaunchScreen.storyboard
+            ios/LaunchScreenBackground.png
+            ios/Images.xcassets
         )
         list(APPEND GAME_SOURCE
-             proj.ios/main.m
-             proj.ios/AppController.mm
-             proj.ios/RootViewController.mm
+             ios/main.m
+             ios/AppController.mm
+             ios/RootViewController.mm
              ${APP_UI_RES}
          )
     elseif(MACOSX)
         set(APP_UI_RES
-            proj.mac/Icon.icns
-            proj.mac/Info.plist
-            proj.mac/en.lproj/MainMenu.xib
-            proj.mac/en.lproj/InfoPlist.strings
+            macos/Icon.icns
+            macos/Info.plist
+            macos/en.lproj/MainMenu.xib
+            macos/en.lproj/InfoPlist.strings
         )
         list(APPEND GAME_SOURCE ${APP_UI_RES})
     endif()
@@ -144,9 +144,10 @@ setup_cocos_app_config(${APP_NAME})
 if(APPLE)
     set_target_properties(${APP_NAME} PROPERTIES RESOURCE "${APP_UI_RES}")
     if(MACOSX)
-        set_target_properties(${APP_NAME} PROPERTIES
-                              MACOSX_BUNDLE_INFO_PLIST "${CMAKE_CURRENT_SOURCE_DIR}/proj.mac/Info.plist"
-                              )
+        set_target_properties(
+            ${APP_NAME} PROPERTIES
+            MACOSX_BUNDLE_INFO_PLIST "${CMAKE_CURRENT_SOURCE_DIR}/macos/Info.plist"
+        )
     elseif(IOS)
         cocos_pak_xcode(${APP_NAME} INFO_PLIST "iOSBundleInfo.plist.in")
         set_xcode_property(${APP_NAME} ASSETCATALOG_COMPILER_APPICON_NAME "AppIcon-${APP_NAME}")
