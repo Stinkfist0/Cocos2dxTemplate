@@ -115,13 +115,10 @@ elseif(APPLE)
     list(APPEND GAME_SOURCE ${cc_common_res})
 endif()
 
-set(all_code_files ${GAME_HEADER} ${GAME_SOURCE})
-
-# mark app complie info
 if(NOT ANDROID)
-    add_executable(${APP_NAME} ${all_code_files})
+    add_executable(${APP_NAME} ${GAME_HEADER} ${GAME_SOURCE})
 else()
-    add_library(${APP_NAME} SHARED ${all_code_files})
+    add_library(${APP_NAME} SHARED ${GAME_HEADER} ${GAME_SOURCE})
     add_subdirectory(${COCOS2DX_ROOT_PATH}/cocos/platform/android ${ENGINE_BINARY_PATH}/cocos/platform)
     target_link_libraries(${APP_NAME} -Wl,--whole-archive cpp_android_spec -Wl,--no-whole-archive)
 endif()
@@ -137,7 +134,7 @@ if (MSVC)
     # Enforce Unicode for Win32 and CRT APIs.
     target_compile_definitions(${APP_NAME} PRIVATE -DUNICODE -D_UNICODE)
 else()
-    target_compile_options(${APP_NAME} PRIVATE -Wall -Wextra -Wpedantic -fvisibility=hidden -Wshadow)
+    target_compile_options(${APP_NAME} PRIVATE -Wall -Wextra -Wpedantic -Wshadow)
 endif()
 
 # mark app resources
