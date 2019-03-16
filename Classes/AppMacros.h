@@ -24,6 +24,8 @@
 
 #pragma once
 
+#define APP_NAME "Cocos2d-x Template"
+
 #include "cocos/math/CCGeometry.h"
 
 /* For demonstrating using one design resolution to match different resources,
