@@ -26,9 +26,7 @@ set(APP_NAME Cocos2dxTemplate)
 
 project(${APP_NAME})
 
-set(CMAKE_CXX_STANDARD 17)
-# With CMake >= 3.8 use target_compile_features() after add_executable instead:
-#target_compile_features(${APP_NAME} PRIVATE cxx_std_17)
+option(SUPPRESS_ENGINE_BUILD_WARNINGS "Suppress engine code's build warnings (there are plenty of them)." ON)
 
 if (NOT DEFINED COCOS2DX_ROOT_PATH)
     message(FATAL_ERROR "COCOS2DX_ROOT_PATH not defined, aborting.")
@@ -50,7 +48,7 @@ else()
 endif()
 
 # Supress vast amount of warning spam coming from dependencies and cocos2d itself.
-if (MSVC)
+if (NOT ANDROID AND SUPPRESS_ENGINE_BUILD_WARNINGS)
     function(get_all_targets _result _dir)
         get_property(_subdirs DIRECTORY "${_dir}" PROPERTY SUBDIRECTORIES)
         foreach(_subdir IN LISTS _subdirs)
@@ -60,9 +58,28 @@ if (MSVC)
         set(${_result} ${${_result}} ${_sub_targets} PARENT_SCOPE)
     endfunction()
 
+    if (MSVC)
+        # Using /W1 for MSVC for now - maybe could do a more fine-grained approach also
+        set(SUPPRESS_WARNINGS "/W1 /D_CRT_SECURE_NO_WARNINGS")
+    else()
+        string(
+            CONCAT SUPPRESS_WARNINGS
+            "-Wno-format "
+            "-Wno-unused-parameter "
+            "-Wno-deprecated-declarations "
+        )
+        # TODO For Clang, add the following
+        # "-Wno-gnu-zero "
+        # "-Wno-variadic-macro-arguments "
+        # "-Wno-gnu-anonymous-struct "
+        # "-Wno-dollar-in-identifier-extension "
+        # "-Wno-nested-anon-types "
+
+    endif()
+
     get_all_targets(targets "${CMAKE_CURRENT_SOURCE_DIR}")
     foreach(target IN LISTS targets)
-        set_target_properties(${target} PROPERTIES COMPILE_FLAGS "/W1 /D_CRT_SECURE_NO_WARNINGS")
+       set_target_properties(${target} PROPERTIES COMPILE_FLAGS "${SUPPRESS_WARNINGS}")
     endforeach()
 endif()
 
@@ -133,6 +150,11 @@ else()
     target_link_libraries(${APP_NAME} -Wl,--whole-archive cpp_android_spec -Wl,--no-whole-archive)
 endif()
 
+# TODO Preferably 17
+set_property(TARGET ${APP_NAME} PROPERTY CXX_STANDARD 14)
+# With CMake >= 3.8 use target_compile_features() is recommended:
+#target_compile_features(${APP_NAME} PRIVATE cxx_std_17)
+
 target_link_libraries(${APP_NAME} cocos2d)
 
 target_include_directories(${APP_NAME} PRIVATE Classes)
@@ -142,7 +164,9 @@ if (MSVC)
     # Enforce Unicode for Win32 and CRT APIs.
     target_compile_definitions(${APP_NAME} PRIVATE -DUNICODE -D_UNICODE)
 else()
-    target_compile_options(${APP_NAME} PRIVATE -Wall -Wextra -Wpedantic -Wshadow)
+    # TODO -Wpedantic . Currently it would cause "warning: ISO C++11 requires at least one argument
+    # for the "..." in a variadic macro" that apparently cannot be suppressed in GCC <= 8.1.
+    target_compile_options(${APP_NAME} PRIVATE -Wall -Wextra -Wshadow)
 endif()
 
 # mark app resources
