@@ -29,5 +29,9 @@ This will be a purely CMake-based (minimal amount of platform- or IDE-specific f
 
 **5c)** iOS: TODO
 
-**6)** Open/build the solution/project
-
+**6)** Open/build the solution/project:
+- open the Visual Studio solution or (`android` folder in Android Studio),
+- or e.g. `cmake --build . -- -j4`,
+- or e.g. `cmake --build . -- /m:4 /p:Platform=x64 /p:Configuration=Release`
+- or e.g. `cd ../Cocos2dxTemplate && cocos compile -p linux`
+  - for `win32` and `linux`, modify the paths in `.cocos-project.json` to match you build directories
