@@ -34,3 +34,7 @@ This will be a purely CMake-based (minimal amount of platform- or IDE-specific f
 - `cmake --build . -- -j4` (use `/m:4` is the MSVC equivalent), or
 - `cd ../Cocos2dxTemplate && cocos compile -p linux`
   - for `win32` and `linux`, modify the paths in `.cocos-project.json` to match you build directories
+
+**7)** Deploying the project:
+- `cd ../Cocos2dxTemplate && cocos deploy -p win32 -m release`
+- The deployed application can be found in the `bin/` folder of this project.

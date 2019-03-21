@@ -85,15 +85,7 @@ if (NOT ANDROID AND SUPPRESS_ENGINE_BUILD_WARNINGS)
     endforeach()
 endif()
 
-# record sources, headers, resources...
-set(GAME_SOURCE)
-set(GAME_HEADER)
-
-set(GAME_RES_FOLDER "${CMAKE_CURRENT_SOURCE_DIR}/res")
-if(APPLE OR VS)
-    cocos_mark_multi_resources(cc_common_res RES_TO "Resources" FOLDERS ${GAME_RES_FOLDER})
-endif()
-
+# Shared source files
 list(APPEND GAME_HEADER
     src/AppMacros.h
     src/IncludeCocos2dBegin.h
@@ -107,11 +99,14 @@ list(APPEND GAME_SOURCE
     src/main.cpp
 )
 
-if(ANDROID)
-    # change APP_NAME to the share library name for Android, it's value depend on AndroidManifest.xml
-    set(APP_NAME MyGame)
+# Platform-specific source and resource files
+set(GAME_RES_FOLDER "${CMAKE_CURRENT_SOURCE_DIR}/res")
+if (APPLE OR VS)
+    cocos_mark_multi_resources(cc_common_res RES_TO "Resources" FOLDERS ${GAME_RES_FOLDER})
+endif()
+
+if (ANDROID)
     list(APPEND GAME_SOURCE android/app/jni/main.cpp)
-elseif(LINUX)
 elseif(WINDOWS)
     list(APPEND GAME_HEADER win32/resource.h)
     list(APPEND GAME_SOURCE win32/Cocos2dxTemplate.rc ${common_res_files})
@@ -144,12 +139,15 @@ elseif(APPLE)
     list(APPEND GAME_SOURCE ${cc_common_res})
 endif()
 
-if(NOT ANDROID)
-    add_executable(${APP_NAME} ${GAME_HEADER} ${GAME_SOURCE})
-else()
+if (ANDROID)
+    # The native code is included to Android application as a shared library so alter
+    # the name to reflect this. The name must match to the name in android/app/AndroidManifest.xml.
+    set(APP_NAME MyGame)
     add_library(${APP_NAME} SHARED ${GAME_HEADER} ${GAME_SOURCE})
     add_subdirectory(${COCOS2DX_ROOT_PATH}/cocos/platform/android ${ENGINE_BINARY_PATH}/cocos/platform)
     target_link_libraries(${APP_NAME} -Wl,--whole-archive cpp_android_spec -Wl,--no-whole-archive)
+else()
+    add_executable(${APP_NAME} ${GAME_HEADER} ${GAME_SOURCE})
 endif()
 
 # TODO Preferably 17
@@ -160,6 +158,15 @@ set_property(TARGET ${APP_NAME} PROPERTY CXX_STANDARD 14)
 target_link_libraries(${APP_NAME} cocos2d)
 
 target_include_directories(${APP_NAME} PRIVATE src)
+
+# Support for "cocos deploy"
+if (WIN32)
+    set_target_properties(
+        ${APP_NAME} PROPERTIES
+        RUNTIME_OUTPUT_DIRECTORY_DEBUG "${CMAKE_BINARY_DIR}/Debug.win32/${APP_NAME}"
+        RUNTIME_OUTPUT_DIRECTORY_RELEASE "${CMAKE_BINARY_DIR}/Release.win32/${APP_NAME}"
+    )
+endif()
 
 if (MSVC)
     target_compile_options(${APP_NAME} PRIVATE /W4 /utf-8 /permissive-)
