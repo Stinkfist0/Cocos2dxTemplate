@@ -142,7 +142,7 @@ endif()
 if (ANDROID)
     # The native code is included to Android application as a shared library so alter
     # the name to reflect this. The name must match to the name in android/app/AndroidManifest.xml.
-    set(APP_NAME MyGame)
+    set(APP_NAME "${APP_NAME}Lib")
     add_library(${APP_NAME} SHARED ${GAME_HEADER} ${GAME_SOURCE})
     add_subdirectory(${COCOS2DX_ROOT_PATH}/cocos/platform/android ${ENGINE_BINARY_PATH}/cocos/platform)
     target_link_libraries(${APP_NAME} -Wl,--whole-archive cpp_android_spec -Wl,--no-whole-archive)

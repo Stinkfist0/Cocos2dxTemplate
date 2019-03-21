@@ -16,7 +16,7 @@ android {
             // NOTE NDK/Make bits are required still even though we want to use CMake only
             if (PROP_BUILD_TYPE == 'ndk-build') {
                 ndkBuild {
-                    targets 'MyGame'
+                    targets 'Cocos2dxTemplateLib'
                     arguments 'NDK_TOOLCHAIN_VERSION=clang'
                     arguments '-j' + Runtime.runtime.availableProcessors()
 
@@ -33,7 +33,7 @@ android {
             }
             else if (PROP_BUILD_TYPE == 'cmake') {
                 cmake {
-                    targets "MyGame"
+                    targets "Cocos2dxTemplateLib"
                     arguments "-DCMAKE_FIND_ROOT_PATH=",
                         "-DANDROID_STL=c++_static",
                         "-DANDROID_TOOLCHAIN=clang",
