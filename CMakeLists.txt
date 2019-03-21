@@ -22,6 +22,8 @@
 # THE SOFTWARE.
 # ****************************************************************************/
 
+# NOTE cocos console parses this CMakeLists.txt and looks for a variable named APP_NAME
+# so it's recommended not to rename it to anything else.
 set(APP_NAME Cocos2dxTemplate)
 
 project(${APP_NAME})
@@ -87,22 +89,22 @@ endif()
 set(GAME_SOURCE)
 set(GAME_HEADER)
 
-set(GAME_RES_FOLDER "${CMAKE_CURRENT_SOURCE_DIR}/Resources")
+set(GAME_RES_FOLDER "${CMAKE_CURRENT_SOURCE_DIR}/res")
 if(APPLE OR VS)
     cocos_mark_multi_resources(cc_common_res RES_TO "Resources" FOLDERS ${GAME_RES_FOLDER})
 endif()
 
 list(APPEND GAME_HEADER
-    Classes/AppMacros.h
-    Classes/IncludeCocos2dBegin.h
-    Classes/IncludeCocos2dEnd.h
-    Classes/HelloWorldScene.h
-    Classes/AppDelegate.h
+    src/AppMacros.h
+    src/IncludeCocos2dBegin.h
+    src/IncludeCocos2dEnd.h
+    src/HelloWorldScene.h
+    src/AppDelegate.h
 )
 list(APPEND GAME_SOURCE
-    Classes/AppDelegate.cpp
-    Classes/HelloWorldScene.cpp
-    Classes/main.cpp
+    src/AppDelegate.cpp
+    src/HelloWorldScene.cpp
+    src/main.cpp
 )
 
 if(ANDROID)
@@ -157,7 +159,7 @@ set_property(TARGET ${APP_NAME} PROPERTY CXX_STANDARD 14)
 
 target_link_libraries(${APP_NAME} cocos2d)
 
-target_include_directories(${APP_NAME} PRIVATE Classes)
+target_include_directories(${APP_NAME} PRIVATE src)
 
 if (MSVC)
     target_compile_options(${APP_NAME} PRIVATE /W4 /utf-8 /permissive-)
