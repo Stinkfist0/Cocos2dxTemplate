@@ -38,6 +38,10 @@ message(STATUS "COCOS2DX_ROOT_PATH=${COCOS2DX_ROOT_PATH}")
 set(CMAKE_MODULE_PATH ${COCOS2DX_ROOT_PATH}/cmake/Modules/)
 # The next line will fail if COCOS2DX_ROOT_PATH does not point to a valid Cocos2d-x directory structure
 include(CocosBuildSet)
+# Suppress Policy CMP0003 spam coming from COCOS2DX_ROOT_PATH/cocos/CMakeLists.txt
+if (COMMAND cmake_policy)
+    cmake_policy(SET CMP0003 NEW)
+endif()
 add_subdirectory(${COCOS2DX_ROOT_PATH}/cocos ${ENGINE_BINARY_PATH}/cocos/core)
 
 # 3.6 is the minimum for Cocos2d-x 3.17.1.
