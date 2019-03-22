@@ -22,6 +22,7 @@ This will be a purely CMake-based (minimal amount of platform- or IDE-specific f
     ```
 - `cd C:\Cocos\ && mkdir MyGame-build && cd MyGame-build`
 - `cmake ../Cocos2dxTemplate -DCOCOS2DX_ROOT_PATH=C:/Cocos/cocos2d-x-3.17.1`
+- Windows: note that Cocos2d-x doesn't currently support Windows x64 build out of the box
 
 **5b)** Android:
 - Set `COCOS2DX_ROOT_PATH` environment variable to point to e.g. `C:\Cocos\cocos2d-x-3.17.1` before opening Android Studio.
@@ -35,6 +36,6 @@ This will be a purely CMake-based (minimal amount of platform- or IDE-specific f
 - `cd ../Cocos2dxTemplate && cocos compile -p linux`
   - for `win32` and `linux`, modify the paths in `.cocos-project.json` to match you build directories
 
-**7)** Deploying the project:
+**7)** TODO Deploying the project:
 - `cd ../Cocos2dxTemplate && cocos deploy -p win32 -m release`
 - The deployed application can be found in the `bin/` folder of this project.

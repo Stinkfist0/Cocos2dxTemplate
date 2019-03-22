@@ -163,14 +163,14 @@ target_link_libraries(${APP_NAME} cocos2d)
 
 target_include_directories(${APP_NAME} PRIVATE src)
 
-# Support for "cocos deploy"
-if (WIN32)
-    set_target_properties(
-        ${APP_NAME} PROPERTIES
-        RUNTIME_OUTPUT_DIRECTORY_DEBUG "${CMAKE_BINARY_DIR}/Debug.win32/${APP_NAME}"
-        RUNTIME_OUTPUT_DIRECTORY_RELEASE "${CMAKE_BINARY_DIR}/Release.win32/${APP_NAME}"
-    )
-endif()
+# TODO Support for "cocos deploy"
+# if (WIN32)
+    # set_target_properties(
+        # ${APP_NAME} PROPERTIES
+        # RUNTIME_OUTPUT_DIRECTORY_DEBUG "${CMAKE_BINARY_DIR}/Debug.win32/${APP_NAME}"
+        # RUNTIME_OUTPUT_DIRECTORY_RELEASE "${CMAKE_BINARY_DIR}/Release.win32/${APP_NAME}"
+    # )
+# endif()
 
 if (MSVC)
     target_compile_options(${APP_NAME} PRIVATE /W4 /utf-8 /permissive-)
