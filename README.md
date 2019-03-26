@@ -32,9 +32,11 @@ This will be a purely CMake-based (minimal amount of platform- or IDE-specific f
 - Set `COCOS2DX_ROOT_PATH` environment variable to point to e.g. `C:\Cocos\cocos2d-x-3.17.1` before opening Android Studio.
 - Make sure `ninja` is in `PATH` (shouble be if using CMake 3.10 or newer installed via Android Studio).
 
-**5c)** **TODO** iOS: 
+**5c)** iOS:
+- `cd /Cocos && mkdir MyGame-build && cd MyGame-build`
 - `cmake .. -G"Xcode" -DCOCOS2DX_ROOT_PATH=/Cocos/cocos2d-x-3.17.1 -DCMAKE_TOOLCHAIN_FILE=../cocos2d-x-3.17.1/cmake/ios.toolchain.cmake`
-- TODO error: invalid iOS deployment version when using 3.17.1
+- The default build is for running on actual hardware, add `-DIOS_PLATFORM=SIMULATOR` (32-bit) or `-DIOS_PLATFORM=SIMULATOR64` (64-bit) for a simulator build.
+- iOS 10.x simulator appears to be required currently, so make sure it is installed.
 
 **6)** Open/build the solution/project:
 - open the Visual Studio solution / Xcode project / `android` folder in Android Studio, or

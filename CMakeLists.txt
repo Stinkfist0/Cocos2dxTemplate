@@ -38,11 +38,6 @@ message(STATUS "COCOS2DX_ROOT_PATH=${COCOS2DX_ROOT_PATH}")
 set(CMAKE_MODULE_PATH ${COCOS2DX_ROOT_PATH}/cmake/Modules/)
 # The next line will fail if COCOS2DX_ROOT_PATH does not point to a valid Cocos2d-x directory structure
 include(CocosBuildSet)
-# Suppress Policy CMP0003 spam coming from COCOS2DX_ROOT_PATH/cocos/CMakeLists.txt
-if (COMMAND cmake_policy)
-    cmake_policy(SET CMP0003 NEW)
-endif()
-add_subdirectory(${COCOS2DX_ROOT_PATH}/cocos ${ENGINE_BINARY_PATH}/cocos/core)
 
 # 3.6 is the minimum for Cocos2d-x 3.17.1.
 # 3.7 is required for BUILDSYSTEM_TARGETS.
@@ -53,7 +48,14 @@ else()
     cmake_minimum_required(VERSION 3.7)
 endif()
 
+# Suppress Policy CMP0003 spam coming from COCOS2DX_ROOT_PATH/cocos/CMakeLists.txt
+if (COMMAND cmake_policy)
+    cmake_policy(SET CMP0003 NEW)
+endif()
+add_subdirectory(${COCOS2DX_ROOT_PATH}/cocos ${ENGINE_BINARY_PATH}/cocos/core)
+
 # Supress vast amount of warning spam coming from dependencies and cocos2d itself.
+# TODO Make a macro for this and move it into a separate file.
 if (NOT ANDROID AND SUPPRESS_ENGINE_BUILD_WARNINGS)
     function(get_all_targets _result _dir)
         get_property(_subdirs DIRECTORY "${_dir}" PROPERTY SUBDIRECTORIES)
@@ -100,7 +102,6 @@ list(APPEND GAME_HEADER
 list(APPEND GAME_SOURCE
     src/AppDelegate.cpp
     src/HelloWorldScene.cpp
-    src/main.cpp
 )
 
 # Platform-specific source and resource files
@@ -113,7 +114,9 @@ if (ANDROID)
     list(APPEND GAME_SOURCE android/app/jni/main.cpp)
 elseif(WINDOWS)
     list(APPEND GAME_HEADER win32/resource.h)
-    list(APPEND GAME_SOURCE win32/Cocos2dxTemplate.rc ${common_res_files})
+    list(APPEND GAME_SOURCE src/main.cpp win32/Cocos2dxTemplate.rc ${common_res_files})
+elseif(LINUX)
+    list(APPEND GAME_SOURCE src/main.cpp)
 elseif(APPLE)
     if(IOS)
         list(APPEND GAME_HEADER
@@ -138,7 +141,7 @@ elseif(APPLE)
             macos/en.lproj/MainMenu.xib
             macos/en.lproj/InfoPlist.strings
         )
-        list(APPEND GAME_SOURCE ${APP_UI_RES})
+        list(APPEND GAME_SOURCE src/main.cpp ${APP_UI_RES})
     endif()
     list(APPEND GAME_SOURCE ${cc_common_res})
 endif()
@@ -194,11 +197,20 @@ if(APPLE)
     elseif(IOS)
         cocos_pak_xcode(${APP_NAME} INFO_PLIST "iOSBundleInfo.plist.in")
         set_xcode_property(${APP_NAME} ASSETCATALOG_COMPILER_APPICON_NAME "AppIcon-${APP_NAME}")
+        set_xcode_property(${APP_NAME} CODE_SIGN_IDENTITY "iPhone Developer")
+        set_xcode_property(${APP_NAME} DEVELOPMENT_TEAM "")
+        set_xcode_property(${APP_NAME} CODE_SIGN_IDENTITY "iPhone Developer")
     endif()
 elseif(WINDOWS)
     cocos_copy_target_dll(${APP_NAME} COPY_TO ${APP_RES_DIR}/..)
+    # TODO If using the latest cocos2d-x sources: cocos_copy_target_dll(${APP_NAME})
 endif()
 
 if(LINUX OR WINDOWS)
     cocos_copy_res(COPY_TO ${APP_RES_DIR} FOLDERS ${GAME_RES_FOLDER})
+    # The following is not available after 3.17.1
+    cocos_copy_res(COPY_TO ${APP_RES_DIR} FOLDERS ${GAME_RES_FOLDER})
+    # Must use this instead:
+    #set(APP_RES_DIR "$<TARGET_FILE_DIR:${APP_NAME}>/Resources")
+    #cocos_copy_target_res(${APP_NAME} COPY_TO ${APP_RES_DIR} FOLDERS ${GAME_RES_FOLDER})
 endif()
