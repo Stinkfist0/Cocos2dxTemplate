@@ -54,6 +54,7 @@ A purely CMake-based (minimal amount of platform- or IDE-specific files) project
 - `cmake .. -G"Xcode" -DCOCOS2DX_ROOT_PATH=/Cocos/cocos2d-x-3.17.1 -DCMAKE_TOOLCHAIN_FILE=../cocos2d-x-3.17.1/cmake/ios.toolchain.cmake`
 - The default build is for running on actual hardware, add `-DIOS_PLATFORM=SIMULATOR` (32-bit) or `-DIOS_PLATFORM=SIMULATOR64` (64-bit) for a simulator build.
 - iOS 10.x simulator appears to be required currently, so make sure it is installed.
+- Remember to set `Cocos2dxTemplate` as the active scheme in order to be able to run the application from Xcode.
 
 **5)** Open/build the solution/project:
 - open the Visual Studio solution / Xcode project / `android` folder in Android Studio, or
