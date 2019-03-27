@@ -25,8 +25,6 @@ A purely CMake-based (minimal amount of platform- or IDE-specific files) project
 - `android/app/res/values/strings.xml`
 - `android/settings.gradle`
 - `win32/Cocos2dxTemplate.rc`
-- `win32/res/Cocos2dxTemplate.ico`
-- `ios/Images.xcassets/AppIcon-Cocos2dxTemplate.appiconset`
 
 **4a)** Win32/Linux/macOS:
 - macOS:
