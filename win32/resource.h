@@ -24,7 +24,7 @@
 
 //{{NO_DEPENDENCIES}}
 // Microsoft Visual C++ generated include file.
-// Used by Cocos2dxTemplate.rc
+// Used by .rc file
 //
 
 #define IDS_PROJNAME                100
