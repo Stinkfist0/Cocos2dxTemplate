@@ -48,6 +48,12 @@ else()
     cmake_minimum_required(VERSION 3.7)
 endif()
 
+# Were only interested in the engine, not in the editor. Extensions seem to contain some usable stuff, so keep them on.
+set(BUILD_EDITOR_COCOSBUILDER OFF CACHE BOOL "Build editor support for cocosbuilder" FORCE)
+set(BUILD_EDITOR_COCOSTUDIO OFF CACHE BOOL "Build editor support for cocostudio" FORCE)
+set(BUILD_EDITOR_SPINE OFF CACHE BOOL "Build editor support for spine" FORCE)
+#set(BUILD_EXTENSIONS OFF CACHE BOOL "Build extension library" FORCE)
+
 # Suppress Policy CMP0003 spam coming from COCOS2DX_ROOT_PATH/cocos/CMakeLists.txt
 if (COMMAND cmake_policy)
     cmake_policy(SET CMP0003 NEW)
