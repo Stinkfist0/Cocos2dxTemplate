@@ -11,36 +11,15 @@ android {
         versionName "1.0"
 
         externalNativeBuild {
-            // TODO remove NDK bits
             def cocos2dxRootPath = (System.getenv('COCOS2DX_ROOT_PATH') ?: "").replaceAll('\\\\', '/')
-            // NOTE NDK/Make bits are required still even though we want to use CMake only
-            if (PROP_BUILD_TYPE == 'ndk-build') {
-                ndkBuild {
-                    targets 'Cocos2dxTemplateLib'
-                    arguments 'NDK_TOOLCHAIN_VERSION=clang'
-                    arguments '-j' + Runtime.runtime.availableProcessors()
-
-                    def module_paths = [cocos2dxRootPath,
-                                        cocos2dxRootPath + "/cocos",
-                                        cocos2dxRootPath + "/external"]
-                    if (OperatingSystem.current().isWindows()) {
-                        arguments 'NDK_MODULE_PATH=' + module_paths.join(";")
-                    }
-                    else {
-                        arguments 'NDK_MODULE_PATH=' + module_paths.join(':')
-                    }
-                }
-            }
-            else if (PROP_BUILD_TYPE == 'cmake') {
-                cmake {
-                    targets "Cocos2dxTemplateLib"
-                    arguments "-DCMAKE_FIND_ROOT_PATH=",
-                        "-DANDROID_STL=c++_static",
-                        "-DANDROID_TOOLCHAIN=clang",
-                        "-DANDROID_ARM_NEON=TRUE",
-                        "-DCOCOS2DX_ROOT_PATH=" + cocos2dxRootPath
-                    cppFlags "-frtti -fexceptions -fsigned-char"
-                }
+            cmake {
+                targets "Cocos2dxTemplateLib"
+                arguments "-DCMAKE_FIND_ROOT_PATH=",
+                    "-DANDROID_STL=c++_static",
+                    "-DANDROID_TOOLCHAIN=clang",
+                    "-DANDROID_ARM_NEON=TRUE",
+                    "-DCOCOS2DX_ROOT_PATH=" + cocos2dxRootPath
+                cppFlags "-frtti -fexceptions -fsigned-char"
             }
         }
 
@@ -58,17 +37,10 @@ android {
     }
 
     externalNativeBuild {
-        if (PROP_BUILD_TYPE == 'ndk-build') {
-            ndkBuild {
-                path "jni/Android.mk"
-            }
-        }
-        else if (PROP_BUILD_TYPE == 'cmake') {
-            cmake {
-                // TODO Would like to use 3.7+, but currently getting weird invalid char error with it
-                version "3.6.0"
-                path "../../CMakeLists.txt"
-            }
+        cmake {
+            // TODO Would like to use 3.7+, but currently getting weird invalid char error with it
+            version "3.6.0"
+            path "../../CMakeLists.txt"
         }
     }
 
@@ -95,23 +67,12 @@ android {
             if (project.hasProperty("RELEASE_STORE_FILE")) {
                 signingConfig signingConfigs.release
             }
-
-            externalNativeBuild {
-                ndkBuild {
-                    arguments 'NDK_DEBUG=0'
-                }
-            }
         }
 
         debug {
             debuggable true
             jniDebuggable true
             renderscriptDebuggable true
-            externalNativeBuild {
-                ndkBuild {
-                    arguments 'NDK_DEBUG=1'
-                }
-            }
         }
     }
 }
