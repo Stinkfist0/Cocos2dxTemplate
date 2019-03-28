@@ -33,7 +33,7 @@ android {
         java.srcDir "src"
         res.srcDir "res"
         manifest.srcFile "AndroidManifest.xml"
-        assets.srcDir "../../Resources"
+        assets.srcDir "../../res"
     }
 
     externalNativeBuild {
@@ -83,7 +83,7 @@ android.applicationVariants.all { variant ->
 
     variant.getMergeAssetsProvider().get().doLast {
         copy {
-            from "${buildDir}/../../../Resources"
+            from "${buildDir}/../../../res"
             into "${buildDir}/intermediates/assets/${variant.dirName}"
             exclude "**/*.gz"
         }
