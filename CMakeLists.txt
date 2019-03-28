@@ -76,13 +76,15 @@ if (NOT ANDROID AND SUPPRESS_ENGINE_BUILD_WARNINGS)
             "-Wno-unused-parameter "
             "-Wno-deprecated-declarations "
         )
-        # TODO For Clang, add the following
-        # "-Wno-gnu-zero "
-        # "-Wno-variadic-macro-arguments "
-        # "-Wno-gnu-anonymous-struct "
-        # "-Wno-dollar-in-identifier-extension "
-        # "-Wno-nested-anon-types "
-
+        if (CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+            string(
+                CONCAT SUPPRESS_WARNINGS
+                "-Wno-gnu-zero-variadic-macro-arguments "
+                "-Wno-gnu-anonymous-struct "
+                "-Wno-dollar-in-identifier-extension "
+                "-Wno-nested-anon-types "
+            )
+        endif()
     endif()
 
     get_all_targets(targets "${CMAKE_CURRENT_SOURCE_DIR}")
@@ -180,9 +182,12 @@ if (MSVC)
     # Enforce Unicode for Win32 and CRT APIs.
     target_compile_definitions(${APP_NAME} PRIVATE -DUNICODE -D_UNICODE)
 else()
-    # TODO -Wpedantic . Currently it would cause "warning: ISO C++11 requires at least one argument
-    # for the "..." in a variadic macro" that apparently cannot be suppressed in GCC <= 8.1.
     target_compile_options(${APP_NAME} PRIVATE -Wall -Wextra -Wshadow)
+    # Don't want to use -Wpedantic for GCC < 8.1 as it would cause warning spam
+    # (extraneous semicolons) that cannot be suppressed.
+    if (CMAKE_CXX_COMPILER_ID MATCHES "Clang" OR CMAKE_CXX_COMPILER_VERSION VERSION_GREATER 8.0)
+        target_compile_options(${APP_NAME} PRIVATE -Wpedantic)
+    endif()
 endif()
 
 # mark app resources
