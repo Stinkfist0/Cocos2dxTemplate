@@ -25,8 +25,12 @@
 # NOTE cocos console parses this CMakeLists.txt and looks for a variable named APP_NAME
 # so it's recommended not to rename it to anything else.
 set(APP_NAME Cocos2dxTemplate)
-
 project(${APP_NAME})
+
+# 3.6 is the minimum for Cocos2d-x 3.17.1.
+# Would like to use 3.7+, but currently getting weird invalid char error with it
+# in Android Studio.
+cmake_minimum_required(VERSION 3.6)
 
 option(SUPPRESS_ENGINE_BUILD_WARNINGS "Suppress engine code's build warnings (there are plenty of them)." ON)
 
@@ -38,15 +42,7 @@ message(STATUS "COCOS2DX_ROOT_PATH=${COCOS2DX_ROOT_PATH}")
 set(CMAKE_MODULE_PATH ${COCOS2DX_ROOT_PATH}/cmake/Modules/)
 # The next line will fail if COCOS2DX_ROOT_PATH does not point to a valid Cocos2d-x directory structure
 include(CocosBuildSet)
-
-# 3.6 is the minimum for Cocos2d-x 3.17.1.
-# 3.7 is required for BUILDSYSTEM_TARGETS.
-# TODO Use 3.7+, but currently getting weird invalid char error with it
-if (ANDROID)
-    cmake_minimum_required(VERSION 3.6)
-else()
-    cmake_minimum_required(VERSION 3.7)
-endif()
+include(Utils.cmake)
 
 # Were only interested in the engine, not in the editor. Extensions seem to contain some usable stuff, so keep them on.
 set(BUILD_EDITOR_COCOSBUILDER OFF CACHE BOOL "Build editor support for cocosbuilder" FORCE)
@@ -60,9 +56,7 @@ if (COMMAND cmake_policy)
 endif()
 add_subdirectory(${COCOS2DX_ROOT_PATH}/cocos ${ENGINE_BINARY_PATH}/cocos/core)
 
-if (NOT ANDROID AND SUPPRESS_ENGINE_BUILD_WARNINGS)
-    # Supress vast amount of warning spam coming from dependencies and cocos2d itself.
-    include(Utils.cmake)
+if (SUPPRESS_ENGINE_BUILD_WARNINGS)
     SuppressCocosEngineBuildWarnings()
 endif()
 

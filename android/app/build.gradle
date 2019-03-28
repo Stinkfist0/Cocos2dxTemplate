@@ -65,7 +65,7 @@ android {
         }
         else if (PROP_BUILD_TYPE == 'cmake') {
             cmake {
-                // TODO Use 3.7+, but currently getting weird invalid char error with it
+                // TODO Would like to use 3.7+, but currently getting weird invalid char error with it
                 version "3.6.0"
                 path "../../CMakeLists.txt"
             }
