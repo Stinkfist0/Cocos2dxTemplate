@@ -44,6 +44,14 @@ set(CMAKE_MODULE_PATH ${COCOS2DX_ROOT_PATH}/cmake/Modules/)
 include(CocosBuildSet)
 include(Utils.cmake)
 
+
+# Detect if using code newer than the 3.17.1 release. E.g. WinRT and Tizen support has been dropped after
+# the 3.17.1 release: https://github.com/cocos2d/cocos2d-x/commit/0e996a9e0076dced404f699e96b5a319e1042efa
+if (NOT EXISTS "${COCOS2DX_ROOT_PATH}/cocos/platform/winrt/CCApplication.h")
+    set(LATEST_COCOS2DX ON)
+    message(STATUS "Cocos2d-x newer than 3.17.1 release detected.")
+endif()
+
 # Were only interested in the engine, not in the editor. Extensions seem to contain some usable stuff, so keep them on.
 set(BUILD_EDITOR_COCOSBUILDER OFF CACHE BOOL "Build editor support for cocosbuilder" FORCE)
 set(BUILD_EDITOR_COCOSTUDIO OFF CACHE BOOL "Build editor support for cocostudio" FORCE)
@@ -174,15 +182,18 @@ if(APPLE)
         set_xcode_property(${APP_NAME} CODE_SIGN_IDENTITY "iPhone Developer")
     endif()
 elseif(WINDOWS)
-    cocos_copy_target_dll(${APP_NAME} COPY_TO ${APP_RES_DIR}/..)
-    # TODO If using the latest cocos2d-x sources: cocos_copy_target_dll(${APP_NAME})
+    if (LATEST_COCOS2DX)
+        cocos_copy_target_dll(${APP_NAME})
+    else()
+        cocos_copy_target_dll(${APP_NAME} COPY_TO ${APP_RES_DIR}/..)
+    endif()
 endif()
 
-if(LINUX OR WINDOWS)
-    cocos_copy_res(COPY_TO ${APP_RES_DIR} FOLDERS ${GAME_RES_FOLDER})
-    # The following is not available after 3.17.1
-    cocos_copy_res(COPY_TO ${APP_RES_DIR} FOLDERS ${GAME_RES_FOLDER})
-    # Must use this instead:
-    #set(APP_RES_DIR "$<TARGET_FILE_DIR:${APP_NAME}>/Resources")
-    #cocos_copy_target_res(${APP_NAME} COPY_TO ${APP_RES_DIR} FOLDERS ${GAME_RES_FOLDER})
+if (LINUX OR WINDOWS)
+    if (LATEST_COCOS2DX)
+        set(APP_RES_DIR "$<TARGET_FILE_DIR:${APP_NAME}>/res")
+        cocos_copy_target_res(${APP_NAME} COPY_TO ${APP_RES_DIR} FOLDERS ${GAME_RES_FOLDER})
+    else()
+        cocos_copy_res(COPY_TO ${APP_RES_DIR} FOLDERS ${GAME_RES_FOLDER})
+    endif()
 endif()

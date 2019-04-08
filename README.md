@@ -1,15 +1,11 @@
 # Cocos2d-x Project Template
 
-A purely CMake-based (minimal amount of platform- or IDE-specific files) project template for new cross-platform (Win32/Linux/macOS/Android/iOS) Cocos2d-x C++14 (or newer) projects.
+A purely CMake-based project template for new cross-platform Cocos2d-x C++14 (or newer) projects.
 
-## To-do
-- Script for renaming the project.
-- Windows x64 build support
-- Support for using the latest code from https://github.com/cocos2d/cocos2d-x
-- Support suppressing engine code's build warnings (fully) on macOS, iOS, and Android/Clang.
-- `cocos deploy` support.
-- Possibility to enforce C++17 or newer.
-- CMakeLists.txt cleanup.
+## Features
+- Supports Cocos2d-x 3.17.1 or newer
+- CMake-based project, no IDE-specific files, minimal amount of platform specific files
+- Win32 (32-bit), Linux, macOS, Android, and iOS
 
 ## Usage
 **1)** Obtain Cocos2d-x and unzip it to e.g. `C:\Cocos\cocos2d-x-3.17.1`
@@ -65,3 +61,13 @@ A purely CMake-based (minimal amount of platform- or IDE-specific files) project
 **6)** **TODO** Deploying the project:
 - `cd ../Cocos2dxTemplate && cocos deploy -p win32 -m release`
 - The deployed application can be found in the `bin/` folder of this project.
+
+## To do
+- Travis CI (at least CMake invocation for all target platforms)
+- Script for renaming the project.
+- Windows x64 build support
+- Support for using the latest code from https://github.com/cocos2d/cocos2d-x
+- Support suppressing engine code's build warnings (fully) on macOS, iOS, and Android/Clang.
+- `cocos deploy` support.
+- Possibility to enforce C++17 or newer.
+- CMakeLists.txt cleanup.
