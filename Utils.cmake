@@ -6,13 +6,16 @@ macro(add_library _target)
 endmacro()
 
 function(GetAllTargets _result _dir)
+    # BUILDSYSTEM_TARGETS approach:
     # get_property(_subdirs DIRECTORY "${_dir}" PROPERTY SUBDIRECTORIES)
     # foreach(_subdir IN LISTS _subdirs)
-        # get_all_targets(${_result} "${_subdir}")
+    #     get_all_targets(${_result} "${_subdir}")
     # endforeach()
     # get_property(_sub_targets DIRECTORY "${_dir}" PROPERTY BUILDSYSTEM_TARGETS)
     # set(${_result} ${${_result}} ${_sub_targets} PARENT_SCOPE)
-    get_property(_result GLOBAL PROPERTY GlobalTargetList)
+
+    get_property(_sub_targets GLOBAL PROPERTY GlobalTargetList)
+    set(${_result} ${_sub_targets} PARENT_SCOPE)
 endfunction()
 
 macro(SuppressCocosEngineBuildWarnings)
@@ -39,6 +42,6 @@ macro(SuppressCocosEngineBuildWarnings)
 
     GetAllTargets(targets "${CMAKE_CURRENT_SOURCE_DIR}")
     foreach(target IN LISTS targets)
-       set_target_properties(${target} PROPERTIES COMPILE_FLAGS "${SUPPRESS_WARNINGS}")
+        set_target_properties(${target} PROPERTIES COMPILE_FLAGS "${SUPPRESS_WARNINGS}")
     endforeach()
 endmacro()
