@@ -1,7 +1,7 @@
 {
     "copy_resources": [
         {
-            "from": "../res",
+            "from": "../Resources",
             "to": ""
         }
     ]

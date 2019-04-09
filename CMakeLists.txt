@@ -82,7 +82,7 @@ list(APPEND GAME_SOURCE
 )
 
 # Platform-specific source and resource files
-set(GAME_RES_FOLDER "${CMAKE_CURRENT_SOURCE_DIR}/res")
+set(GAME_RES_FOLDER "${CMAKE_CURRENT_SOURCE_DIR}/Resources")
 if (APPLE OR VS)
     cocos_mark_multi_resources(cc_common_res RES_TO "Resources" FOLDERS ${GAME_RES_FOLDER})
 endif()
@@ -191,7 +191,7 @@ endif()
 
 if (LINUX OR WINDOWS)
     if (LATEST_COCOS2DX)
-        set(APP_RES_DIR "$<TARGET_FILE_DIR:${APP_NAME}>/res")
+        set(APP_RES_DIR "$<TARGET_FILE_DIR:${APP_NAME}>/Resources")
         cocos_copy_target_res(${APP_NAME} COPY_TO ${APP_RES_DIR} FOLDERS ${GAME_RES_FOLDER})
     else()
         cocos_copy_res(COPY_TO ${APP_RES_DIR} FOLDERS ${GAME_RES_FOLDER})
