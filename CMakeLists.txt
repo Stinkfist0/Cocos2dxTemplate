@@ -38,12 +38,13 @@ if (NOT DEFINED COCOS2DX_ROOT_PATH)
     message(FATAL_ERROR "COCOS2DX_ROOT_PATH not defined, aborting.")
 endif()
 message(STATUS "COCOS2DX_ROOT_PATH=${COCOS2DX_ROOT_PATH}")
+file(TO_CMAKE_PATH ${COCOS2DX_ROOT_PATH} COCOS2DX_ROOT_PATH)
 
 set(CMAKE_MODULE_PATH ${COCOS2DX_ROOT_PATH}/cmake/Modules/)
 # The next line will fail if COCOS2DX_ROOT_PATH does not point to a valid Cocos2d-x directory structure
 include(CocosBuildSet)
-include(Utils.cmake)
 
+include(Utils.cmake)
 
 # Detect if using code newer than the 3.17.1 release. E.g. WinRT and Tizen support has been dropped after
 # the 3.17.1 release: https://github.com/cocos2d/cocos2d-x/commit/0e996a9e0076dced404f699e96b5a319e1042efa
@@ -62,7 +63,7 @@ set(BUILD_EDITOR_SPINE OFF CACHE BOOL "Build editor support for spine" FORCE)
 if (COMMAND cmake_policy)
     cmake_policy(SET CMP0003 NEW)
 endif()
-add_subdirectory(${COCOS2DX_ROOT_PATH}/cocos ${ENGINE_BINARY_PATH}/cocos/core)
+add_subdirectory("${COCOS2DX_ROOT_PATH}/cocos" "${ENGINE_BINARY_PATH}/cocos/core")
 
 if (SUPPRESS_ENGINE_BUILD_WARNINGS)
     SuppressCocosEngineBuildWarnings()
@@ -165,8 +166,11 @@ else()
     endif()
 endif()
 
-# mark app resources
+# TODO Don't probably want to use this. At least personally I prefer e.g.
+# "Header Files" and "Source Files" instead of single "Source Files".
+# This function also defines APP_BIN_DIR and APP_RES_DIR
 setup_cocos_app_config(${APP_NAME})
+
 if(APPLE)
     set_target_properties(${APP_NAME} PROPERTIES RESOURCE "${APP_UI_RES}")
     if(MACOSX)
