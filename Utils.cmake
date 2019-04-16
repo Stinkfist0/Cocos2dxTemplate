@@ -42,7 +42,11 @@ macro(SuppressCocosEngineBuildWarnings)
 
     GetAllTargets(targets "${CMAKE_CURRENT_SOURCE_DIR}")
     foreach(target IN LISTS targets)
-        get_target_property(FLAGS ${target} COMPILE_FLAGS)
-        set_target_properties(${target} PROPERTIES COMPILE_FLAGS "${FLAGS} ${SUPPRESS_WARNINGS}")
+        get_target_property(flags ${target} COMPILE_FLAGS)
+        if (NOT flags)
+            set(flags "")
+        endif()
+        set_target_properties(${target} PROPERTIES COMPILE_FLAGS "${flags} ${SUPPRESS_WARNINGS}")
     endforeach()
 endmacro()
+
