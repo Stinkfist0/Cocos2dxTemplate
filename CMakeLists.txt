@@ -44,7 +44,8 @@ set(CMAKE_MODULE_PATH ${COCOS2DX_ROOT_PATH}/cmake/Modules/)
 # The next line will fail if COCOS2DX_ROOT_PATH does not point to a valid Cocos2d-x directory structure
 include(CocosBuildSet)
 
-include(Utils.cmake)
+include(cmake/Utils.cmake)
+include(cmake/PrecompiledHeader.cmake)
 
 # Detect if using code newer than the 3.17.1 release. E.g. WinRT and Tizen support has been dropped after
 # the 3.17.1 release: https://github.com/cocos2d/cocos2d-x/commit/0e996a9e0076dced404f699e96b5a319e1042efa
@@ -165,6 +166,13 @@ else()
         target_compile_options(${APP_NAME} PRIVATE -Wpedantic)
     endif()
 endif()
+
+# PCH
+target_sources(${APP_NAME} PRIVATE "src/pch.h")
+if (MSVC)
+    target_sources(${APP_NAME} PRIVATE "src/pch.cpp")
+endif()
+add_precompiled_header(${APP_NAME} "src/pch.h" FORCEINCLUDE SOURCE_CXX "src/pch.cpp")
 
 # TODO Don't probably want to use this. At least personally I prefer e.g.
 # "Header Files" and "Source Files" instead of single "Source Files".
